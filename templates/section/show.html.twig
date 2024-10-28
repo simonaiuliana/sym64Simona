@@ -1,0 +1,16 @@
+{# templates/section/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h1>{{ section.title }}</h1>
+<p>{{ section.detail }}</p>
+<ul class="list-group">
+    {% for article in section.articles %}
+        <li class="list-group-item">
+            <h2>{{ article.title }}</h2>
+            <a href="{{ path('article_show', {'slug': article.title_slug}) }}" class="btn btn-primary">Read more</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{{ path('homepage') }}" class="btn btn-secondary">Return vers l'accueil</a>
+{% endblock %}

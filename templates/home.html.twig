@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h1>Les dernieres articles</h1>
+<ul class="list-group">
+    {% for article in articles %}
+        <li class="list-group-item">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.text|slice(0, 300) }}...</p>
+            <a href="{{ path('article_show', {'slug': article.title_slug}) }}" class="btn btn-primary">Lire plus</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
