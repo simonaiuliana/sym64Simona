@@ -10,3 +10,8 @@ h1 {
 .navbar {
     margin-bottom: 20px;
 }
+@media (max-width: 600px) {
+    .post-card {
+        width: 100%;
+    }
+}

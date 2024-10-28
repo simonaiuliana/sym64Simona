@@ -15,6 +15,14 @@ class SectionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Section::class);
     }
+    public function findOneBySlug(string $slug): ?Section
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
 //    /**
 //     * @return Section[] Returns an array of Section objects

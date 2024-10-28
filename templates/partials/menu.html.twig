@@ -1,16 +1,21 @@
-{# templates/partials/menu.html.twig #}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{{ path('homepage') }}">Home</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav">
+            {% if article is defined %}
+                <li class="nav-item {{ app.request.attributes.get('_route') == 'article_show' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ path('article_show', { id: article.id }) }}">Articles</a>
+                </li>
+            {% endif %}
+            {% if sections is defined %}
+                {% for section in sections %}
+                    <li class="nav-item {{ app.request.attributes.get('_route') == 'section_show' and app.request.attributes.get('slug') == section.slug ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ path('section_show', { slug: section.slug }) }}">{{ section.name }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('article_list') }}">Articles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('section_list') }}">Sections</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin_index') }}">Admin</a>
+                <a class="nav-link" href="{{ path('security_login') }}">Admin</a>
             </li>
         </ul>
     </div>

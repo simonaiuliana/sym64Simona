@@ -9,24 +9,42 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/admin', name: 'admin_dashboard')]
-    public function dashboard(AuthenticationUtils $authenticationUtils): Response
+    #[Route(path: '/login', name: 'security_login')]
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        // get the login error if there is one
+        // If the user is already authenticated, redirect to the admin dashboard
+        if ($this->getUser()) {
+            return $this->redirectToRoute('admin_dashboard');
+        }
+
+        // Get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('admin/index.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        // Define the title for the login page
+        $title = 'Login';
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'title' => $title, // Pass the title variable to the view
+        ]);
+    }
+
+    #[Route(path: '/admin', name: 'admin_dashboard')]
+    public function dashboard(): Response
+    {
+        // Restrict access to users with ROLE_ADMIN
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        return $this->render('admin/index.html.twig');
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
+        // This method can be blank - it will be intercepted by the logout key on your firewall.
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }
