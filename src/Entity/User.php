@@ -14,22 +14,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     private ?string $username = null;
 
     /**
-     * @var list<string> The user roles
+     * @var array The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(length: 150, nullable: true)]
@@ -41,8 +41,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $activate = null;
+    #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
+    private ?int $activate = 0; // Use 0 for false, 1 for true
 
     public function getId(): ?int
     {
@@ -57,46 +57,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
     }
 
-    /**
-     * @see UserInterface
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // Ensure every user has at least ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -105,17 +87,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Clear sensitive data if any
     }
 
     public function getFullname(): ?string
@@ -126,7 +103,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFullname(?string $fullname): static
     {
         $this->fullname = $fullname;
-
         return $this;
     }
 
@@ -138,7 +114,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUniqid(string $uniqid): static
     {
         $this->uniqid = $uniqid;
-
         return $this;
     }
 
@@ -150,7 +125,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -162,7 +136,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActivate(int $activate): static
     {
         $this->activate = $activate;
-
         return $this;
     }
 }

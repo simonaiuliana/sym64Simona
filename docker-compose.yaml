@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - phpmyadmin
+
+  db:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine # Use Postgres from compose.yaml or switch to MySQL from docker-compose.yaml
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${POSTGRES_USER:-app} # Match the DB user
+      PMA_PASSWORD: ${POSTGRES_PASSWORD:-}
+    ports:
+      - "8080:80"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/usr/src/app
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
+volumes:
+  db_data:

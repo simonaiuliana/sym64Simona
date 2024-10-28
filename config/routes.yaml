@@ -3,3 +3,18 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+section_index:
+    path: /sections
+    controller: App\Controller\SectionsController::index
+
+section_new:
+    path: /sections/new
+    controller: App\Controller\SectionsController::new
+
+section_edit:
+    path: /sections/{id}/edit
+    controller: App\Controller\SectionsController::edit
+
+section_delete:
+    path: /sections/{id}/delete
+    controller: App\Controller\SectionsController::delete

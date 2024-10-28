@@ -5,46 +5,44 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Section;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $user_id = null; // This should be the User's ID
 
     #[ORM\Column(length: 160)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 162)]
+    #[ORM\Column(length: 162, unique: true)]
     private ?string $title_slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $article_data_create = null;
+    private ?\DateTimeInterface $article_date_create = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $article_date_posted = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $published = null;
+    #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
+    private ?int $published = 0; // Use 0 for false, 1 for true
+
+    #[ORM\ManyToOne(targetEntity: Section::class, inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Section $section = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getUserId(): ?int
@@ -55,7 +53,6 @@ class Article
     public function setUserId(int $user_id): static
     {
         $this->user_id = $user_id;
-
         return $this;
     }
 
@@ -67,7 +64,6 @@ class Article
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -79,7 +75,6 @@ class Article
     public function setTitleSlug(string $title_slug): static
     {
         $this->title_slug = $title_slug;
-
         return $this;
     }
 
@@ -91,19 +86,17 @@ class Article
     public function setText(string $text): static
     {
         $this->text = $text;
-
         return $this;
     }
 
-    public function getArticleDataCreate(): ?\DateTimeInterface
+    public function getArticleDateCreate(): ?\DateTimeInterface
     {
-        return $this->article_data_create;
+        return $this->article_date_create;
     }
 
-    public function setArticleDataCreate(\DateTimeInterface $article_data_create): static
+    public function setArticleDateCreate(\DateTimeInterface $article_date_create): static
     {
-        $this->article_data_create = $article_data_create;
-
+        $this->article_date_create = $article_date_create;
         return $this;
     }
 
@@ -115,7 +108,6 @@ class Article
     public function setArticleDatePosted(?\DateTimeInterface $article_date_posted): static
     {
         $this->article_date_posted = $article_date_posted;
-
         return $this;
     }
 
@@ -127,7 +119,17 @@ class Article
     public function setPublished(int $published): static
     {
         $this->published = $published;
-
         return $this;
+    }
+
+    public function setSection(?Section $section): static
+    {
+        $this->section = $section;
+        return $this;
+    }
+
+    public function getSection(): ?Section
+    {
+        return $this->section;
     }
 }
