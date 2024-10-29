@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -20,15 +21,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $username = null;
 
-    /**
-     * @var array The user roles
-     */
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
@@ -42,8 +37,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
-    private ?int $activate = 0; // Use 0 for false, 1 for true
+    private ?int $activate = 0; // 0 for false, 1 for true
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class)]
+    private Collection $articles; // Colecția de articole asociate utilizatorului
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection(); // Initializează colecția
+    }
+
+    // Getters and Setters
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +140,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActivate(int $activate): static
     {
         $this->activate = $activate;
+        return $this;
+    }
+
+    public function getArticles(): Collection
+    {
+        return $this->articles; // Returnează articolele utilizatorului
+    }
+
+    public function addArticle(Article $article): static
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article; // Adaugă articolul
+            $article->setUser($this); // Asociază utilizatorul în articol
+        }
+        return $this;
+    }
+
+    public function removeArticle(Article $article): static
+    {
+        if ($this->articles->removeElement($article)) {
+            if ($article->getUser() === $this) {
+                $article->setUser(null); // Elimină asociația
+            }
+        }
         return $this;
     }
 }

@@ -1,9 +1,14 @@
-{# templates/article/show.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block content %}
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block body %}
 <h1>{{ article.title }}</h1>
-<p>By {{ article.user.fullname }} on {{ article.articleDateCreate|date('Y-m-d H:i') }}</p>
 <p>{{ article.text }}</p>
-<a href="{{ path('homepage') }}" class="btn btn-secondary">Return vers l'accueil</a>
+<small>Created on {{ article.article_date_create|date('Y-m-d H:i') }}</small>
+
+<a href="{{ path('article_edit', {slug: article.title_slug}) }}">Edit Article</a>
+<a href="{{ path('article_delete', {slug: article.title_slug}) }}" class="btn btn-danger">Delete Article</a>
+<a href="{{ path('homepage') }}">Back to Home</a>
 {% endblock %}

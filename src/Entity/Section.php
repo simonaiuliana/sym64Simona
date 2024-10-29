@@ -6,8 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
 
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
 class Section
@@ -26,24 +24,17 @@ class Section
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $section_detail = null;
 
-    // Add a property for articles
     #[ORM\OneToMany(mappedBy: 'section', targetEntity: Article::class, cascade: ['persist', 'remove'])]
     private Collection $articles;
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection(); // Initialize the collection
+        $this->articles = new ArrayCollection(); // Initializează colecția
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-        return $this;
     }
 
     public function getSectionTitle(): ?string
@@ -79,17 +70,17 @@ class Section
         return $this;
     }
 
-    // Add method to add an article
+    // Metodă pentru a adăuga un articol
     public function addArticle(Article $article): static
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->setSection($this); // Set the section for the article
+            $article->setSection($this); // Setează secțiunea pentru articol
         }
         return $this;
     }
 
-    // Add method to get all articles
+    // Metodă pentru a obține toate articolele
     public function getArticles(): Collection
     {
         return $this->articles;

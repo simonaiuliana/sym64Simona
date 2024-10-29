@@ -1,32 +1,43 @@
-<!-- Responsive navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container px-5">
-        <a class="navbar-brand" href="{{ path('homepage') }}">Mon Simfony-Docker site</a>
+        <a class="navbar-brand" href="{{ path('homepage') }}">Mon Symfony-Docker site</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <!-- Home link -->
                 <li class="nav-item {{ app.request.attributes.get('_route') == 'homepage' ? 'active' : '' }}">
                     <a class="nav-link" href="{{ path('homepage') }}">Home</a>
                 </li>
-                {% if article is defined %}
-                    <li class="nav-item {{ app.request.attributes.get('_route') == 'article_show' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ path('article_show', { id: article.id }) }}">Articles</a>
-                    </li>
-                {% endif %}
+                
+                <!-- Dynamic sections list -->
                 {% if sections is defined %}
                     {% for section in sections %}
-                        <li class="nav-item {{ app.request.attributes.get('_route') == 'section_show' and app.request.attributes.get('slug') == section.slug ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ path('section_show', { slug: section.slug }) }}">{{ section.name }}</a>
+                        <li class="nav-item {{ app.request.attributes.get('_route') == 'section_show' and app.request.attributes.get('slug') == section.section_slug ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ path('section_show', { slug: section.section_slug }) }}">Section {{ section.section_title }}</a>
                         </li>
                     {% endfor %}
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('security_login') }}">Admin</a>
-                </li>
+
+                <!-- Admin link -->
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('security_login') }}">Admin</a>
+                    </li>
+                    <!-- Logout link -->
+                    <li class="nav-item">
+                        <form method="post" action="{{ path('app_logout') }}" style="display: inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('logout') }}">
+                            <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('security_login') }}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
-<!-- End Responsive navbar -->

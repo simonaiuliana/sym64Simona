@@ -23,7 +23,7 @@ class SectionsController extends AbstractController
     }
 
     #[Route('/new', name: 'section_new')]
-    #[IsGranted(('ROLE_ADMIN'))]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $section = new Section();
@@ -39,5 +39,45 @@ class SectionsController extends AbstractController
         return $this->render('section/new.html.twig', ['form' => $form->createView()]);
     }
 
-    // Add methods for edit, update, and delete
+    #[Route('/{id}/edit', name: 'section_edit')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function edit(Request $request, EntityManagerInterface $em, Section $section): Response
+    {
+        $form = $this->createForm(SectionType::class, $section);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush(); // Just update the existing entity
+            return $this->redirectToRoute('section_index');
+        }
+
+        return $this->render('section/edit.html.twig', ['form' => $form->createView(), 'section' => $section]);
+    }
+
+    #[Route('/{slug}', name: 'section_show')]
+    public function show(EntityManagerInterface $em, string $slug): Response
+    {
+        $section = $em->getRepository(Section::class)->findOneBy(['section_slug' => $slug]);
+
+        if (!$section) {
+            throw $this->createNotFoundException('Section pas trouve');
+        }
+
+        return $this->render('section/show.html.twig', [
+            'section' => $section,
+            // You can also add associated articles if needed
+        ]);
+    }
+
+    #[Route('/{id}', name: 'section_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function delete(Request $request, EntityManagerInterface $em, Section $section): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $section->getId(), $request->request->get('_token'))) {
+            $em->remove($section);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('section_index');
+    }
 }

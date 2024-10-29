@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Section;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -15,8 +13,9 @@ class Article
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $user_id = null; // This should be the User's ID
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null; // Relație cu User
 
     #[ORM\Column(length: 160)]
     private ?string $title = null;
@@ -34,28 +33,30 @@ class Article
     private ?\DateTimeInterface $article_date_posted = null;
 
     #[ORM\Column(type: Types::SMALLINT, options: ['default' => 0])]
-    private ?int $published = 0; // Use 0 for false, 1 for true
+    private ?int $published = 0;
 
     #[ORM\ManyToOne(targetEntity: Section::class, inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Section $section = null;
+    private ?Section $section = null; // Relație cu Section
 
+    // Getters and Setters
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user; // Returnează User
     }
 
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user; // Setează User
         return $this;
     }
 
+    // Rămânând restul metodelor...
     public function getTitle(): ?string
     {
         return $this->title;
@@ -122,14 +123,15 @@ class Article
         return $this;
     }
 
-    public function setSection(?Section $section): static
-    {
-        $this->section = $section;
-        return $this;
-    }
-
     public function getSection(): ?Section
     {
         return $this->section;
     }
+
+    public function setSection(?Section $section): static
+    {
+        $this->section = $section; // Setează secțiunea
+        return $this;
+    }
 }
+

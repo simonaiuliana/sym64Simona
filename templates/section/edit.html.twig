@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit section{% endblock %}
+
+{% block body %}
+    <h1>Edit section</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success">Edit</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('section_index') }}">Revien vers sections</a>
+{% endblock %}

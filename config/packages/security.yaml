@@ -38,6 +38,8 @@ security:
         # Uncomment and configure access rules
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:
