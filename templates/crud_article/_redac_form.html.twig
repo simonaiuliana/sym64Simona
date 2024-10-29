@@ -1,0 +1,34 @@
+<div class="container">
+    {{ form_start(form) }}
+        <div class="form-group mb-2">
+            {{ form_label(form.title, "Titre: ") }}
+            <br>
+            {{ form_widget(form.title, {'attr': {'class': 'mt-1', 'placeholder': 'Titre'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+        <div class="form-group mb-2">
+            {{ form_label(form.text, "Text: ") }}
+            <br>
+            {{ form_widget(form.text, {'attr': {'class': 'mt-1'}}) }}
+            {{ form_errors(form.text) }}
+        </div>
+        <div class="form-group mb-2">
+            {{ form_widget(form.published, {'attr': {'class': 'mt-1'}}) }}
+            {{ form_label(form.published, "Publié") }}
+            {{ form_errors(form.published) }}
+        </div>
+        <div class="form-group mb-2">
+            {{ form_label(form.sections, "Sections: ") }}
+            <br>
+            {{ form_widget(form.sections, {'attr': {'class': 'mt-1'}}) }}
+            {{ form_errors(form.sections) }}
+        </div>
+        <div class="form-group mb-2">
+            {{ form_label(form.articleDateCreate, "Date de création: ") }}
+            <br>
+            {{ form_widget(form.articleDateCreate, {'attr': {'class': 'mt-1'}}) }}
+            {{ form_errors(form.articleDateCreate) }}
+        </div>
+        <button class="btn btn-primary">{{ button_label|default('Envoyer') }}</button>
+    {{ form_end(form) }}
+</div>

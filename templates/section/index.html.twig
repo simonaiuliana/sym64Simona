@@ -1,39 +1,36 @@
-{# templates/section/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Sections{% endblock %}
+{% block title %}SECTIONS{% endblock %}
 
 {% block body %}
-    <h1>Liste des Sections</h1>
+    <!-- Page Header-->
+    <header class="masthead">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Sections</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for section in sections %}
-                <tr>
-                    <td>{{ section.sectionTitle }}</td>
-                    <td>
-                        <a href="{{ path('section_show', { slug: section.section_slug }) }}">Voir</a>
-                        <a href="{{ path('section_edit', { id: section.id }) }}">Éditer</a>
-                        <form method="post" action="{{ path('section_delete', { id: section.id }) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette section ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
-                            <button type="submit">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">Aucune section disponible.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('section_new') }}">Ajouter une nouvelle section</a>
+    <!-- Main Content-->
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {% for section in sections %}
+                    <div class="post-preview">
+                        <a href="{{ path('section', {slug: section.sectionSlug}) }}">
+                            <h2 class="post-title">{{ section.sectionTitle }}</h2>
+                            <h3 class="post-subtitle">{{ section.sectionDetail }}</h3>
+                        </a>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+        {% block body %}
+            <!-- Page Header-->
+            <header class="masthead">
+                <div class="container position-relative px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            <div class="site-heading">
+                                <h1>Section:  '{{ section.sectionTitle }}'</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content-->
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        {% for article in articles %}
+                            <!-- Article preview-->
+                            <div class="article-preview">
+                                <a href="{{ path('app_article', {slug: article.titleSlug}) }}">
+                                    <h2 class="article-title">{{ article.title }}</h2>
+                                    <h3 class="post-subtitle fs-5 fw-normal">{{ article.text|u.truncate(200, '...', false) }}</h3>
+                                </a>
+                                <a href="{{ path('app_article', {slug: article.titleSlug}) }}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">lire la suite -></a>
+                                <p class="article-meta">
+                                    Posté par
+                                    <a href="#!">{{ article.user.fullname }}</a>
+                                    le {{ article.articleDatePosted|date('d-m-Y') }}
+                                </p>
+                            </div>
+                            <!-- Divider-->
+                            <hr class="my-4" />
+                        {% endfor %}
+                        <!-- Pager-->
+                        <!--<div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Articles →</a></div>-->
+                    </div>
+                </div>
+            </div>
+        {% endblock %}

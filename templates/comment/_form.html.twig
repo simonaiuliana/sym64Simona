@@ -1,0 +1,9 @@
+<div class="container">
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_widget(form.commentMessage, {'attr': {'class': ''}}) }}
+            {{ form_errors(form.commentMessage) }}
+        </div>
+        <button class="btn btn-primary">{{ button_label|default('Commenter') }}</button>
+    {{ form_end(form) }}
+</div>

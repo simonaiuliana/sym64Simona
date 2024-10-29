@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Section CRUD{% endblock %}
+
+{% block body %}
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('assets/img/post-bg.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="post-heading">
+                        <h1 class="text-center">Section CRUD</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h1>Section CRUD</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for section in sections %}
+                        <tr>
+                            <td>{{ section.id }}</td>
+                            <td>{{ section.sectionTitle }}</td>
+                            <td>{{ section.sectionDetail }}</td>
+                            <td>
+                                <a href="{{ path('app_crud_section_show', {'slug': section.sectionSlug}) }}">Voir</a>
+                                <a href="{{ path('app_crud_section_edit', {'slug': section.sectionSlug}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_crud_section_new') }}">Créer nouveau</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

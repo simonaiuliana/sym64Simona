@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article Voir{% endblock %}
+
+{% block body %}
+    <!-- Page Header-->
+    <header class="masthead">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Article Voir</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h1><a href="{{ path('app_article', {slug: article.titleSlug}) }}">Article</a></h1>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ article.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Autheur</th>
+                            <td>{{ article.user.username }} | {{ article.user.fullname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Titre</th>
+                            <td>{{ article.title }}</td>
+                        </tr>
+                        <tr>
+                            <th>text</th>
+                            <td>{{ article.text }}</td>
+                        </tr>
+                        <tr>
+                            <th>Sections</th>
+                            <td>
+                                {% for section in article.sections %}
+                                <a href="{{ path('section', {slug: section.sectionSlug}) }}">{{ section.sectionTitle }}</a>{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Date de création</th>
+                            <td>{{ article.articleDateCreate ? article.articleDateCreate|date('d/m/Y H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date de publication</th>
+                            <td>{{ article.articleDatePosted ? article.articleDatePosted|date('d/m/Y H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Publié</th>
+                            <td>{{ article.published ? 'Oui' : 'Non' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_crud_article_index') }}">Retour à la liste</a>
+
+                <a href="{{ path('app_crud_article_edit', {'slug': article.titleSlug}) }}">Modifier</a>
+
+                {{ include('crud_article/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

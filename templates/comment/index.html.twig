@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaire CRUD{% endblock %}
+
+{% block body %}
+    <!-- Page Header-->
+    <header class="masthead">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Crud Commentaire</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <h1>Commentaires</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Article</th>
+                            <th>Utilisateur</th>
+                            <th>Message</th>
+                            <th>Date de création</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for comment in comments %}
+                        <tr>
+                            <td>{{ comment.id }}</td>
+                            <td>{{ comment.article.Title }}</td>
+                            <td>{{ comment.user.username }}</td>
+                            <td>{{ comment.commentMessage }}</td>
+                            <td>{{ comment.commentDateCreated ? comment.commentDateCreated|date('d/m/Y H:i:s') : '' }}</td>
+                            <td>
+                                <a href="{{ path('app_comment_show', {'id': comment.id}) }}">Voir</a>
+                                <a href="{{ path('app_comment_edit', {'id': comment.id}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">Aucune donné trouvée</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_comment_new') }}">Créer nouveau</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

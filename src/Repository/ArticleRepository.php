@@ -16,28 +16,71 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-//    /**
-//     * @return Article[] Returns an array of Article objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Article
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.article_date_create', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findAllByAuthor(int $id): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.user = :val')
+            ->setParameter('val', $id)
+            ->orderBy('p.article_date_create', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findTenLastPublished(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.published = 1')
+            ->orderBy('p.article_date_posted', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findAllPublished(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.published = 1')
+            ->orderBy('p.article_date_posted', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Article Returns an array of Article objects
+     */
+    public function getArticleBySlug(string $slug): ?Article
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.title_slug = :val')
+            ->setParameter('val', $slug)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

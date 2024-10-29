@@ -1,13 +1,16 @@
 <?php
+
 namespace App\Entity;
 
 use App\Repository\SectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
+#[UniqueEntity(fields: ['section_slug'], message: 'Există deja o secțiune cu acest slug')]
 class Section
 {
     #[ORM\Id]
@@ -15,21 +18,24 @@ class Section
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $section_title = null;
 
-    #[ORM\Column(length: 105)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $section_slug = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(length: 500, nullable: true)]
     private ?string $section_detail = null;
 
-    #[ORM\OneToMany(mappedBy: 'section', targetEntity: Article::class, cascade: ['persist', 'remove'])]
+    /**
+     * @var Collection<int, Article>
+     */
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'sections')]
     private Collection $articles;
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection(); // Initializează colecția
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,6 +65,14 @@ class Section
         return $this;
     }
 
+    // Metodă automată pentru generarea slug-ului
+    public function generateSlug(SluggerInterface $slugger): void
+    {
+        if (!$this->section_slug || '-' === $this->section_slug) {
+            $this->section_slug = (string) $slugger->slug((string) $this->section_title)->lower();
+        }
+    }
+
     public function getSectionDetail(): ?string
     {
         return $this->section_detail;
@@ -70,19 +84,34 @@ class Section
         return $this;
     }
 
-    // Metodă pentru a adăuga un articol
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
     public function addArticle(Article $article): static
     {
         if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setSection($this); // Setează secțiunea pentru articol
+            $this->articles->add($article);
+            $article->addSection($this);
         }
         return $this;
     }
 
-    // Metodă pentru a obține toate articolele
-    public function getArticles(): Collection
+    public function removeArticle(Article $article): static
     {
-        return $this->articles;
+        if ($this->articles->removeElement($article)) {
+            $article->removeSection($this);
+        }
+        return $this;
+    }
+
+    // Adăugăm metoda toString pentru afișare în formulare
+    public function __toString(): string
+    {
+        return $this->section_title ?? '';
     }
 }
