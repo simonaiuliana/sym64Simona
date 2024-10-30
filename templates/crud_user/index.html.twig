@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs CRUD{% endblock %}
+
+{% block body %}
+    <!-- Page Header-->
+    <header class="masthead">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Utilisateurs CRUD</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container-fluid px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Utilisateurs</th>
+                            <th>Roles</th>
+                            <th>Nom complet</th>
+                            <th>Email</th>
+                            <th>Actif</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.roles|map(role => role|slice(5)|lower)|join(', ') }}</td>
+                            <td>{{ user.fullname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.activate ? 'Oui' : 'Non' }}</td>
+                            <td>
+                                <a href="{{ path('app_crud_user_show', {'id': user.id}) }}">Voir</a>
+                                <a href="{{ path('app_crud_user_edit', {'id': user.id}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('app_crud_user_new') }}">Créer nouveau</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

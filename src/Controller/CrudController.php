@@ -19,6 +19,7 @@ class CrudController extends AbstractController
                 ["app_comment_index", "Commentaires Crud"],
                 ["app_crud_article_index", "Articles Crud"],
                 ["app_crud_section_index", "Sections Crud"],
+                ["app_crud_user_index", "Users Crud"],
             ];
         }else {
             $cruds = [

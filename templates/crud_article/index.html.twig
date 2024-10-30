@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ article.id }}</td>
                             <td>{{ article.title }}</td>
-                            <td>{{ article.user.fullname }}</td>
+                            <td><a href="{{ path('app_author', {uniqid: article.user.uniqid}) }}">{{ article.user.fullname }}</a></td>
                             <td>{{ article.articleDateCreate ? article.articleDateCreate|date('d/m/Y H:i:s') : '' }}</td>
                             <td>{{ article.published ? 'Oui' : 'Non' }}</td>
                             <td>

@@ -29,7 +29,7 @@
                         </tr>
                         <tr>
                             <th>Autheur</th>
-                            <td>{{ article.user.username }} | {{ article.user.fullname }}</td>
+                            <td><a href="{{ path('app_author', {uniqid: article.user.uniqid}) }}">{{ article.user.username }} | {{ article.user.fullname }}</a></td>
                         </tr>
                         <tr>
                             <th>Titre</th>

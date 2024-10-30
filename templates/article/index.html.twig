@@ -10,7 +10,7 @@
                         <h1>{{ article.title }}</h1>
                         <span class="meta">
                             Posté par
-                            <a href="#!">{{ article.user.fullname }}</a>
+                            <a href="{{ path('app_author', {uniqid: article.user.uniqid}) }}">{{ article.user.fullname }}</a>
                             le {{ article.articleDatePosted|date('d-m-Y') }}
                         </span>
                         <br>
@@ -24,7 +24,7 @@
                             {% endfor %}
                             <style>
                             .section-link:hover {
-                                color: #b0a6a6 !important;
+                                color: #b0a8a8 !important;
                             }
                             </style>
                         </span>

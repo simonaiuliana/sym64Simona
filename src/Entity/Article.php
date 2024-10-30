@@ -30,9 +30,6 @@ class Article
      * @var Collection<int, Section>
      */
     #[ORM\ManyToMany(targetEntity: Section::class, inversedBy: 'articles')]
-    #[ORM\JoinTable(name: 'article_section')]
-    #[ORM\JoinColumn(name: 'article_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'section_id', referencedColumnName: 'id')]
     private Collection $sections;
 
 
