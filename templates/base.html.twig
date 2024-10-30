@@ -47,9 +47,9 @@
                             {% if "ROLE_ADMIN" in user.roles or "ROLE_REDAC" in user.roles %}
                             <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('crud') }}">Crud</a></li>
                             {% endif %}
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_logout') }}">se déconnecter</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_logout') }}">Se déconnecter</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_login') }}">se connecter</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ path('app_login') }}">Se connecter</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -59,15 +59,41 @@
         {% block body %}{% endblock %}
         {% block footer %}
             <!-- Footer-->
-            <footer class="border-top">
-                <div class="container px-4 px-lg-5">
-                    <div class="row gx-4 gx-lg-5 justify-content-center">
-                        <div class="col-md-10 col-lg-8 col-xl-7">
-                            <div class="small text-center text-muted fst-italic">Copyright &copy; sym64Simona {{ 'now'|date('Y') }}</div>
-                        </div>
-                    </div>
+           <footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: contact@example.com</p>
+                <p>Telephone: +32 123 456 789</p>
+            </div>
+            
+             <div class="container">
+               <div class="footer-content">
+                <div class="footer-text">
+                <span>S</span>
+                <span>I</span>
+                <span>M</span>
+                <span>O</span>
+                <span>N</span>
+                <span>A</span>
                 </div>
-            </footer>
+              </div>
+             </div>
+            
+            <div class="footer-section">
+                <h4>Social Media</h4>
+                <p><i class="fab fa-facebook"></i> Facebook</p>
+                <p><i class="fab fa-instagram"></i> Instagram</p>
+                <p><i class="fab fa-linkedin"></i> LinkedIn</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; {{ "now"|date("Y") }} Simona. toutes les droits reservées.</p>
+        </div>
+    </div>
+</footer> 
         {% endblock %}
     </body>
 </html>
