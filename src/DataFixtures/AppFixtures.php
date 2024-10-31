@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
         }
 
         // redators
-        for($i=1;$i<=24;$i++){
+        for($i=1;$i<=5;$i++){
             $user = new User();
             $user->setUsername("redac$i");
             $user->setRoles(["ROLE_REDAC"]);
